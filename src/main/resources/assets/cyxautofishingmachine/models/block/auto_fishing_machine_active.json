@@ -1,0 +1,6 @@
+{
+  "parent": "cyxautofishingmachine:block/auto_fishing_machine",
+  "textures": {
+    "front": "cyxautofishingmachine:block/auto_fishing_machine_front_active"
+  }
+}

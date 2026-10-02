@@ -1,0 +1,42 @@
+{
+  "itemGroup.cyxautofishingmachine.main": "自动钓鱼机",
+  "block.cyxautofishingmachine.auto_fishing_machine": "自动钓鱼机",
+  "tag.item.cyxautofishingmachine.fishing_rods": "钓竿",
+
+  "gui.cyxautofishingmachine.energy_amount": "%s / %s",
+
+  "gui.cyxautofishingmachine.water.label": "水域",
+  "gui.cyxautofishingmachine.water.unknown": "未知",
+  "gui.cyxautofishingmachine.water.closed": "封闭",
+  "gui.cyxautofishingmachine.water.open": "开放",
+
+  "gui.cyxautofishingmachine.phase.idle": "停",
+  "gui.cyxautofishingmachine.phase.waiting": "等待鱼上钩",
+  "gui.cyxautofishingmachine.phase.approaching": "鱼正在靠近",
+
+  "gui.cyxautofishingmachine.status.none": "钓鱼中",
+  "gui.cyxautofishingmachine.status.no_rod": "未放钓竿",
+  "gui.cyxautofishingmachine.status.no_water": "周围没有水",
+  "gui.cyxautofishingmachine.status.cache_full": "缓存已满",
+  "gui.cyxautofishingmachine.status.output_full": "相邻容器已满",
+  "gui.cyxautofishingmachine.status.grid_disconnected": "电网未连接",
+  "gui.cyxautofishingmachine.status.not_enough_power": "电力不足",
+  "gui.cyxautofishingmachine.status.running_unpowered": "运行中·电网断开",
+
+  "gui.cyxautofishingmachine.hint.none": "机器会自动开始下一杆",
+  "gui.cyxautofishingmachine.hint.no_rod": "往钓竿槽里放一根钓竿",
+  "gui.cyxautofishingmachine.hint.no_water": "在机器正面放一片水",
+  "gui.cyxautofishingmachine.hint.cache_full": "在机器旁边放一个箱子或漏斗",
+  "gui.cyxautofishingmachine.hint.output_full": "清空相邻容器里的东西",
+  "gui.cyxautofishingmachine.hint.grid_disconnected": "用导线把机器接到电源上",
+  "gui.cyxautofishingmachine.hint.not_enough_power": "检查发电机是否在运行",
+
+  "gui.cyxautofishingmachine.tooltip.energy": "电量：%s / %s FE",
+  "gui.cyxautofishingmachine.tooltip.energy_per_catch": "每杆消耗 %s FE",
+  "gui.cyxautofishingmachine.tooltip.catches_left": "还够钓 %s 杆",
+  "gui.cyxautofishingmachine.tooltip.progress": "剩余 %s 秒（%s 刻）",
+  "gui.cyxautofishingmachine.tooltip.water_unknown": "还没有确定下钩点",
+  "gui.cyxautofishingmachine.tooltip.water_closed": "封闭水域 —— 这里钓不到宝藏",
+  "gui.cyxautofishingmachine.tooltip.water_closed_hint": "把机器移向水面中间",
+  "gui.cyxautofishingmachine.tooltip.water_open": "开放水域 —— 可能钓到宝藏"
+}

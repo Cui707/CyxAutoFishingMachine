@@ -1,0 +1,42 @@
+{
+  "itemGroup.cyxautofishingmachine.main": "Auto Fishing Machine",
+  "block.cyxautofishingmachine.auto_fishing_machine": "Auto Fishing Machine",
+  "tag.item.cyxautofishingmachine.fishing_rods": "Fishing Rods",
+
+  "gui.cyxautofishingmachine.energy_amount": "%s / %s",
+
+  "gui.cyxautofishingmachine.water.label": "Water",
+  "gui.cyxautofishingmachine.water.unknown": "Unknown",
+  "gui.cyxautofishingmachine.water.closed": "Closed",
+  "gui.cyxautofishingmachine.water.open": "Open",
+
+  "gui.cyxautofishingmachine.phase.idle": "Idle",
+  "gui.cyxautofishingmachine.phase.waiting": "Waiting for a bite",
+  "gui.cyxautofishingmachine.phase.approaching": "Fish approaching",
+
+  "gui.cyxautofishingmachine.status.none": "Fishing",
+  "gui.cyxautofishingmachine.status.no_rod": "No fishing rod",
+  "gui.cyxautofishingmachine.status.no_water": "No water nearby",
+  "gui.cyxautofishingmachine.status.cache_full": "Cache full",
+  "gui.cyxautofishingmachine.status.output_full": "Chest is full",
+  "gui.cyxautofishingmachine.status.grid_disconnected": "Grid not connected",
+  "gui.cyxautofishingmachine.status.not_enough_power": "Not enough power",
+  "gui.cyxautofishingmachine.status.running_unpowered": "Running, grid cut",
+
+  "gui.cyxautofishingmachine.hint.none": "The machine starts the next catch on its own",
+  "gui.cyxautofishingmachine.hint.no_rod": "Insert a fishing rod",
+  "gui.cyxautofishingmachine.hint.no_water": "Place water in front of the machine",
+  "gui.cyxautofishingmachine.hint.cache_full": "Put a chest or hopper next to the machine",
+  "gui.cyxautofishingmachine.hint.output_full": "Empty the adjacent container",
+  "gui.cyxautofishingmachine.hint.grid_disconnected": "Connect it to a power source with cables",
+  "gui.cyxautofishingmachine.hint.not_enough_power": "Check that your generators are running",
+
+  "gui.cyxautofishingmachine.tooltip.energy": "Stored: %s / %s FE",
+  "gui.cyxautofishingmachine.tooltip.energy_per_catch": "Uses %s FE per catch",
+  "gui.cyxautofishingmachine.tooltip.catches_left": "Enough for %s more catches",
+  "gui.cyxautofishingmachine.tooltip.progress": "Remaining: %s s (%s ticks)",
+  "gui.cyxautofishingmachine.tooltip.water_unknown": "No fishing spot determined yet",
+  "gui.cyxautofishingmachine.tooltip.water_closed": "Closed water - no treasure here",
+  "gui.cyxautofishingmachine.tooltip.water_closed_hint": "Move the machine toward the middle of the water",
+  "gui.cyxautofishingmachine.tooltip.water_open": "Open water - treasure is possible"
+}

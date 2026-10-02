@@ -1,0 +1,164 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	// java-library 提供 api 配置；本模组对外暴露的公共类型（方块 / 方块实体 / 菜单）
+	// 将来若要被别的模组依赖，走这里。
+	id 'java-library'
+	id 'maven-publish'
+}
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+	// 见下方 ccgJar 的说明：前置 Mod 既不在 Maven Central，也没有发布到任何 Fabric 仓库，
+	// 所以只能以本地文件依赖。其余仓库 Loom 会自动注入。
+}
+
+// ------------------------------------------------------------ 前置 Mod 定位
+//
+// CrimsonCopperGrid 目前没有发布到任何 Maven 仓库，只能以本地 jar 作为依赖。
+// 按顺序查找：
+//   1. libs/crimsoncoppergrid-<版本>.jar          （仓库内自带，CI 也用这一份）
+//   2. ../CrimsonCopperGrid/build/libs/...        （本机开发时直接吃上游的构建产物）
+//   3. -PccgJar=<绝对路径>                        （临时覆盖）
+//
+// 找不到就直接报错，而不是让编译期丢出一堆「找不到符号」——
+// 那类报错很难看出根因其实是依赖没配好。
+def ccgJar = project.findProperty('ccgJar')
+		? file(project.findProperty('ccgJar'))
+		: [
+			file("libs/crimsoncoppergrid-${project.ccg_version}.jar"),
+			file("../CrimsonCopperGrid/build/libs/crimsoncoppergrid-${project.ccg_version}.jar"),
+		].find { it.exists() }
+
+if (ccgJar == null || !ccgJar.exists()) {
+	throw new GradleException("""
+找不到前置 Mod CrimsonCopperGrid ${project.ccg_version} 的 jar。
+请任选一种方式提供：
+  1) 把 crimsoncoppergrid-${project.ccg_version}.jar 放到 libs/ 目录；
+  2) 在 CrimsonCopperGrid 项目里执行 ./gradlew build（产物会落在 ../CrimsonCopperGrid/build/libs/）；
+  3) 运行 Gradle 时用 -PccgJar=<jar 的绝对路径> 显式指定。
+""".stripIndent())
+}
+
+loom {
+	// 与上游一致：把客户端代码拆到独立的 source set
+	splitEnvironmentSourceSets()
+
+	mods {
+		"cyxautofishingmachine" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+
+	// 自动化测试：GameTest 起一个无头服务端，把 @GameTest 方法跑一遍后退出。
+	//
+	// 为什么非要有它：菜单逻辑（槽位准入、快速移动是否守恒）**没有别的办法在无人值守下验证**。
+	// 静态读代码看不出「shift 点击会不会复制物品」，RCON 也点不到界面里的槽位。
+	// GameTest 能在真实服务端里造一个玩家、真的走一遍 AbstractContainerMenu 的交互路径。
+	//
+	// 运行：./gradlew runGameTest
+	// 测试类登记在 fabric.mod.json 的 fabric-gametest 入口点。
+	runs {
+		gameTest {
+			server()
+			name = "Game Test"
+			vmArg "-Dfabric-api.gametest"
+			vmArg "-Dfabric-api.gametest.report-file=${project.layout.buildDirectory.get().asFile}/junit.xml"
+			runDir "build/gametest"
+		}
+
+		// 客户端自动化测试：起一个真实客户端、自动进世界、自动右键方块、自动截图。
+		//
+		// 服务端 GameTest 够不着的东西全在这里：界面到底能不能打开、贴图有没有画歪、
+		// 布局有没有重叠。这些只有真的渲染一遍才知道。
+		//
+		// 运行：./gradlew runClientGameTest   （会打开一个窗口，测试完自动关闭）
+		clientGameTest {
+			client()
+			name = "Client Game Test"
+			vmArg "-Dfabric.client.gametest"
+			runDir "build/client-gametest"
+		}
+	}
+}
+
+dependencies {
+	// 版本号统一在 gradle.properties 中维护
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// Fabric API：技术上是可选的，但基本都会用到。
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// 前置 Mod：编译期 + 开发运行时都要有它。
+	//
+	// 注意：Loom 1.18 已经没有 modImplementation / modApi 这类配置了
+	// （官方映射下不再需要「开发命名空间 ↔ 产物命名空间」的重映射，
+	//  mod 依赖与普通依赖走同一条路）。所以这里就是普通的 implementation。
+	implementation files(ccgJar)
+
+	// Team Reborn Energy：与 TechReborn / CrimsonCopperGrid 同一套能量 API。
+	// 生产环境里这份能力由 CrimsonCopperGrid 内嵌（JiJ）提供，本模组**不重复打包**，
+	// 所以这里只声明依赖、不加 include。
+	implementation "teamreborn:energy:${project.energy_version}"
+
+	// 单元测试：钓鱼状态机、开放水域判定这类纯逻辑不需要启动游戏就能验证
+	testImplementation platform('org.junit:junit-bom:5.11.4')
+	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	testLogging {
+		events 'passed', 'skipped', 'failed'
+	}
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	// 与上游一致：MC 26.3 要求的运行时是 Java 25
+	it.options.release = 25
+	// 让过时 API 的警告直接指出具体位置
+	it.options.compilerArgs << '-Xlint:deprecation'
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName"}
+	}
+}
+
+// maven 发布配置
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			from components.java
+		}
+	}
+
+	repositories {
+		// 这里用于发布产物的仓库，与上面的依赖仓库不是同一回事
+	}
+}

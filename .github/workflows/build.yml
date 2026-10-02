@@ -1,0 +1,30 @@
+# 每次 push / PR 自动构建，尽早发现只在特定平台或 Java 版本上出现的问题。
+#
+# 前置 Mod CrimsonCopperGrid 没有发布到任何 Maven 仓库，因此仓库里带了
+# libs/crimsoncoppergrid-1.1.0.jar（见 .gitignore 里的 !libs/*.jar 例外）。
+# CI 直接用这一份，不需要先去构建上游。
+name: build
+on: [pull_request, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+      - name: validate gradle wrapper
+        uses: gradle/actions/wrapper-validation@v6
+      - name: setup jdk
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'microsoft'
+      - name: make gradle wrapper executable
+        run: chmod +x ./gradlew
+      - name: build
+        run: ./gradlew build
+      - name: capture build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: Artifacts
+          path: build/libs/

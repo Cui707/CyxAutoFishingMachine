@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "cyxautofishingmachine:block/auto_fishing_machine_side",
+    "top": "cyxautofishingmachine:block/auto_fishing_machine_top",
+    "side": "cyxautofishingmachine:block/auto_fishing_machine_side",
+    "front": "cyxautofishingmachine:block/auto_fishing_machine_front"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "down": {"texture": "#top", "cullface": "down"},
+        "up": {"texture": "#top", "cullface": "up"},
+        "north": {"texture": "#front", "cullface": "north"},
+        "south": {"texture": "#side", "cullface": "south"},
+        "west": {"texture": "#side", "cullface": "west"},
+        "east": {"texture": "#side", "cullface": "east"}
+      }
+    }
+  ]
+}

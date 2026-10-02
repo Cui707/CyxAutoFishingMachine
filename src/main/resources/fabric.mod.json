@@ -1,0 +1,48 @@
+{
+	"schemaVersion": 1,
+	"id": "cyxautofishingmachine",
+	"version": "${version}",
+	"name": "CyxAutoFishingMachine",
+	"description": "自动钓鱼机：接入 CrimsonCopperGrid 电网，按原版钓鱼机制产出鱼类 / 垃圾 / 宝藏，并自动输出到相邻容器。",
+	"authors": [
+		"Cui707"
+	],
+	"contact": {
+		"homepage": "https://github.com/Cui707/CyxAutoFishingMachine",
+		"sources": "https://github.com/Cui707/CyxAutoFishingMachine"
+	},
+	"license": "MIT",
+	"icon": "assets/cyxautofishingmachine/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.cyx.cyxautofishingmachine.CyxAutoFishingMachine"
+		],
+		"client": [
+			"com.cyx.cyxautofishingmachine.client.CyxAutoFishingMachineClient"
+		],
+		"fabric-gametest": [
+			"com.cyx.cyxautofishingmachine.gametest.MenuGameTests",
+			"com.cyx.cyxautofishingmachine.gametest.FishingGameTests",
+			"com.cyx.cyxautofishingmachine.gametest.OutputGameTests",
+			"com.cyx.cyxautofishingmachine.gametest.GuiGameTests"
+		],
+		"fabric-client-gametest": [
+			"com.cyx.cyxautofishingmachine.client.gametest.AutoFishingMachineClientGameTest"
+		]
+	},
+	"mixins": [
+		"cyxautofishingmachine.mixins.json",
+		{
+			"config": "cyxautofishingmachine.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*",
+		"crimsoncoppergrid": ">=1.1.0"
+	}
+}

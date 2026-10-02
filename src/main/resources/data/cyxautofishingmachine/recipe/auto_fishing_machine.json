@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone",
+    "F": "minecraft:fishing_rod"
+  },
+  "pattern": [
+    "CIC",
+    "RFR",
+    "ICI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cyxautofishingmachine:auto_fishing_machine"
+  }
+}
